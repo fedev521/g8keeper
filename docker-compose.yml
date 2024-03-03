@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  tinksrv:
+    image: tinksrv
+    build:
+      context: src/tinksrv
+      dockerfile: ./Dockerfile
