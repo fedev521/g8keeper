@@ -6,3 +6,5 @@ services:
     build:
       context: src/tinksrv
       dockerfile: ./Dockerfile
+    expose:
+      - 8001
