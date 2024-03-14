@@ -40,4 +40,11 @@ var routes = Routes{
 		"/v1/passwords",
 		ListPasswords,
 	},
+
+	Route{
+		"PostPassword",
+		"POST",
+		"/v1/passwords",
+		PostPassword,
+	},
 }

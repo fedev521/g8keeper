@@ -18,4 +18,7 @@ Call with:
 
 ```bash
 curl localhost:8080/v1/passwords
+
+echo -n '{"name":"Google", "password":"mY$3kreT"}' \
+| curl -s -d @- -X POST localhost:8080/v1/passwords
 ```
