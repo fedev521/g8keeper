@@ -1,0 +1,12 @@
+[log]
+level = "info"
+
+[app]
+name = "backend"
+port = "8080"
+
+[tinksrv]
+host = "localhost"
+port = "3306"
+
+storage = "inmemory"

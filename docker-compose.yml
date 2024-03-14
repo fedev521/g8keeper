@@ -8,3 +8,10 @@ services:
       dockerfile: ./Dockerfile
     expose:
       - 8001
+  backend:
+    image: backend
+    build:
+      context: src/backend
+      dockerfile: ./Dockerfile
+    expose:
+      - 8080
