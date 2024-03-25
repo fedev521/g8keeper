@@ -6,6 +6,8 @@ import (
 	"github.com/fedev521/g8keeper/backend/internal/types"
 )
 
+// TODO handle concurrency
+
 type InMapKeeper struct {
 	memory map[string]types.Password
 }

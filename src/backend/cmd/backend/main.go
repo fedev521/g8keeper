@@ -57,13 +57,13 @@ func run(_ []string, _ io.Reader, _ io.Writer) error {
 	}
 
 	log.Info("App started", map[string]interface{}{
-		"name": config.App.Name,
-		"port": config.App.Port,
+		"srv":     config.App,
+		"tinksvc": config.TinkSvc,
 	})
 
 	log.Info("Setup completed")
 
-	err = srv.StartServer(config.App)
+	err = srv.StartServer(config.App, config.TinkSvc)
 	if err != nil {
 		log.Error(err.Error())
 		return fmt.Errorf("could not start server: %w", err)

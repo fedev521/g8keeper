@@ -3,6 +3,8 @@ package srv
 import (
 	"net/http"
 
+	"github.com/fedev521/g8keeper/backend/internal/store"
+	"github.com/fedev521/g8keeper/backend/internal/svc"
 	"github.com/gorilla/mux"
 )
 
@@ -15,7 +17,24 @@ type Route struct {
 
 type Routes []Route
 
-func NewRouter() *mux.Router {
+func NewRouter(tinkSvcConf svc.TinkSvcConfig) *mux.Router {
+	var keeper = store.NewInMapKeeper()
+
+	var routes = Routes{
+		Route{
+			"ListPasswords",
+			"GET",
+			"/v1/passwords",
+			ListPasswordsHF(keeper),
+		},
+		Route{
+			"PostPassword",
+			"POST",
+			"/v1/passwords",
+			PostPasswordHF(keeper),
+		},
+	}
+
 	router := mux.NewRouter().StrictSlash(true)
 	for _, r := range routes {
 		var handler http.Handler
@@ -30,21 +49,4 @@ func NewRouter() *mux.Router {
 	}
 
 	return router
-}
-
-var routes = Routes{
-
-	Route{
-		"ListPasswords",
-		"GET",
-		"/v1/passwords",
-		ListPasswords,
-	},
-
-	Route{
-		"PostPassword",
-		"POST",
-		"/v1/passwords",
-		PostPassword,
-	},
 }

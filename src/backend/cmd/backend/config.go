@@ -6,20 +6,25 @@ import (
 
 	"github.com/fedev521/g8keeper/backend/internal/log"
 	"github.com/fedev521/g8keeper/backend/internal/srv"
+	"github.com/fedev521/g8keeper/backend/internal/svc"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
 // Overall program configuration.
 type configuration struct {
-	Log log.Config
-	App srv.Config
+	Log     log.Config
+	App     srv.Config
+	TinkSvc svc.TinkSvcConfig
 }
 
 // Validate validates the configuration.
 func (c configuration) Validate() error {
 
 	if err := c.App.Validate(); err != nil {
+		return err
+	}
+	if err := c.TinkSvc.Validate(); err != nil {
 		return err
 	}
 

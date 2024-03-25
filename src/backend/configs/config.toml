@@ -5,8 +5,10 @@ level = "info"
 name = "backend"
 port = "8080"
 
-[tinksrv]
+[tinksvc]
 host = "localhost"
 port = "3306"
+kekUri = "mykekuri"
 
+[database]
 storage = "inmemory"
