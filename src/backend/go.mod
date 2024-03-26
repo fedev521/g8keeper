@@ -2,6 +2,10 @@ module github.com/fedev521/g8keeper/backend
 
 go 1.22.1
 
+require github.com/fedev521/g8keeper/tinksrv v0.0.0
+
+replace github.com/fedev521/g8keeper/tinksrv v0.0.0 => ../tinksrv
+
 require (
 	github.com/gorilla/mux v1.8.1
 	github.com/sirupsen/logrus v1.9.3
@@ -10,8 +14,6 @@ require (
 	logur.dev/adapter/logrus v0.5.0
 	logur.dev/logur v0.17.0
 )
-
-require github.com/google/go-cmp v0.6.0 // indirect
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
@@ -25,10 +27,13 @@ require (
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
+	github.com/tink-crypto/tink-go/v2 v2.1.0
 	go.uber.org/multierr v1.11.0 // indirect
+	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/exp v0.0.0-20240325151524-a685a6edb6d8 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

@@ -3,6 +3,7 @@ package srv
 import (
 	"net/http"
 
+	"github.com/fedev521/g8keeper/backend/internal/log"
 	"github.com/fedev521/g8keeper/backend/internal/store"
 	"github.com/fedev521/g8keeper/backend/internal/svc"
 	"github.com/gorilla/mux"
@@ -18,7 +19,12 @@ type Route struct {
 type Routes []Route
 
 func NewRouter(tinkSvcConf svc.TinkSvcConfig) *mux.Router {
-	var keeper = store.NewInMapKeeper()
+	var keeper store.PasswordKeeper
+	keeper, err := store.NewCryptedInMemKeeper()
+	if err != nil {
+		log.Error(err.Error())
+		// TODO return err
+	}
 
 	var routes = Routes{
 		Route{
