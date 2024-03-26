@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/fedev521/tinksrv/internal/log"
+	"github.com/fedev521/g8keeper/tinksrv/internal/log"
 )
 
 func StartServer(conf Config) error {

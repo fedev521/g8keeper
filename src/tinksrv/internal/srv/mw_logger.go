@@ -3,7 +3,7 @@ package srv
 import (
 	"net/http"
 
-	"github.com/fedev521/tinksrv/internal/log"
+	"github.com/fedev521/g8keeper/tinksrv/internal/log"
 )
 
 func Logger(inner http.Handler, routeName string) http.Handler {

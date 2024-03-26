@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/fedev521/tinksrv/internal/log"
-	"github.com/fedev521/tinksrv/internal/srv"
+	"github.com/fedev521/g8keeper/tinksrv/internal/log"
+	"github.com/fedev521/g8keeper/tinksrv/internal/srv"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )

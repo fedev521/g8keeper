@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/fedev521/tinksrv/internal/crypt"
-	"github.com/fedev521/tinksrv/internal/log"
+	"github.com/fedev521/g8keeper/tinksrv/internal/crypt"
+	"github.com/fedev521/g8keeper/tinksrv/internal/log"
 )
 
 func PostEncrypt(w http.ResponseWriter, r *http.Request) {

@@ -3,7 +3,7 @@ package crypt
 import (
 	"fmt"
 
-	"github.com/fedev521/tinksrv/internal/log"
+	"github.com/fedev521/g8keeper/tinksrv/internal/log"
 	"github.com/tink-crypto/tink-go/v2/aead"
 	"github.com/tink-crypto/tink-go/v2/testing/fakekms"
 )
