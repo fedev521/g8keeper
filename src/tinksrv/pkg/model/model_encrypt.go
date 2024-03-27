@@ -1,4 +1,4 @@
-package srv
+package model
 
 type EncryptReqBody struct {
 	// The plaintext to encrypt.

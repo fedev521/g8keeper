@@ -7,14 +7,15 @@ import (
 
 	"github.com/fedev521/g8keeper/tinksrv/internal/crypt"
 	"github.com/fedev521/g8keeper/tinksrv/internal/log"
+	"github.com/fedev521/g8keeper/tinksrv/pkg/model"
 )
 
 func PostEncrypt(w http.ResponseWriter, r *http.Request) {
-	dec := json.NewDecoder(http.MaxBytesReader(w, r.Body, 1<<20))
+	dec := json.NewDecoder(http.MaxBytesReader(w, r.Body, 64<<10))
 	dec.DisallowUnknownFields()
 
 	// decode request
-	var body EncryptReqBody
+	var body model.EncryptReqBody
 	err := dec.Decode(&body)
 	if err != nil {
 		log.Error(err.Error())
@@ -31,7 +32,7 @@ func PostEncrypt(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// create response payload with ciphertext
-	payload, _ := json.Marshal(EncryptResponse200{
+	payload, _ := json.Marshal(model.EncryptResponse200{
 		CiphertextB64: base64.StdEncoding.EncodeToString(ciphertext),
 	})
 
@@ -45,7 +46,7 @@ func PostDecrypt(w http.ResponseWriter, r *http.Request) {
 	dec.DisallowUnknownFields()
 
 	// decode request
-	var body DecryptReqBody
+	var body model.DecryptReqBody
 	err := dec.Decode(&body)
 	if err != nil {
 		log.Error(err.Error())
@@ -68,7 +69,7 @@ func PostDecrypt(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// create response payload with plaintext
-	payload, _ := json.Marshal(DecryptResponse200{
+	payload, _ := json.Marshal(model.DecryptResponse200{
 		Plaintext: string(plaintext),
 	})
 

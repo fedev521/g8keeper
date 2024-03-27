@@ -1,4 +1,4 @@
-package srv
+package model
 
 type DecryptReqBody struct {
 	// The ciphertext to decrypt.
