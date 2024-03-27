@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/fedev521/g8keeper/tinksrv/internal/kms"
 	"github.com/fedev521/g8keeper/tinksrv/internal/log"
 	"github.com/fedev521/g8keeper/tinksrv/internal/srv"
 	"github.com/spf13/pflag"
@@ -59,11 +60,18 @@ func run(_ []string, _ io.Reader, _ io.Writer) error {
 	log.Info("App started", map[string]interface{}{
 		"name": config.App.Name,
 		"port": config.App.Port,
+		"kms":  config.KMS,
 	})
 
 	log.Info("Setup completed")
 
-	err = srv.StartServer(config.App)
+	kekManager, err := kms.NewKEKManager(config.KMS)
+	if err != nil {
+		log.Error(err.Error())
+		return fmt.Errorf("could not start server: %w", err)
+	}
+
+	err = srv.StartServer(config.App, kekManager)
 	if err != nil {
 		log.Error(err.Error())
 		return fmt.Errorf("could not start server: %w", err)

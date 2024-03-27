@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/fedev521/g8keeper/tinksrv/internal/kms"
 	"github.com/fedev521/g8keeper/tinksrv/internal/log"
 	"github.com/fedev521/g8keeper/tinksrv/internal/srv"
 	"github.com/spf13/pflag"
@@ -14,12 +15,16 @@ import (
 type configuration struct {
 	Log log.Config
 	App srv.Config
+	KMS kms.Config
 }
 
 // Validate validates the configuration.
 func (c configuration) Validate() error {
 
 	if err := c.App.Validate(); err != nil {
+		return err
+	}
+	if err := c.KMS.Validate(); err != nil {
 		return err
 	}
 

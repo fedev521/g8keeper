@@ -16,5 +16,8 @@ func (c Config) Validate() error {
 	if c.Name == "" {
 		return errors.New("app name cannot be empty")
 	}
+	if c.Port == "" {
+		return errors.New("port cannot be empty")
+	}
 	return nil
 }

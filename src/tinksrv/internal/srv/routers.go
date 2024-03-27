@@ -1,9 +1,9 @@
 package srv
 
 import (
-	"fmt"
 	"net/http"
 
+	"github.com/fedev521/g8keeper/tinksrv/internal/kms"
 	"github.com/gorilla/mux"
 )
 
@@ -16,8 +16,25 @@ type Route struct {
 
 type Routes []Route
 
-func NewRouter() *mux.Router {
+func NewRouter(kekManager *kms.KEKManager) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
+
+	var routes = Routes{
+		Route{
+			"PostEncrypt",
+			"POST",
+			"/v1/encrypt",
+			PostEncryptHF(kekManager),
+		},
+
+		Route{
+			"PostDecrypt",
+			"POST",
+			"/v1/decrypt",
+			PostDecryptHF(kekManager),
+		},
+	}
+
 	for _, r := range routes {
 		var handler http.Handler
 		handler = r.HandlerFunc
@@ -31,31 +48,4 @@ func NewRouter() *mux.Router {
 	}
 
 	return router
-}
-
-func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello from demo Tink encryption/decryption server!\n")
-}
-
-var routes = Routes{
-	Route{
-		"Index",
-		"GET",
-		"/",
-		Index,
-	},
-
-	Route{
-		"PostEncrypt",
-		"POST",
-		"/v1/encrypt",
-		PostEncrypt,
-	},
-
-	Route{
-		"PostDecrypt",
-		"POST",
-		"/v1/decrypt",
-		PostDecrypt,
-	},
 }
