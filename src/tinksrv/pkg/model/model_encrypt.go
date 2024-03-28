@@ -1,11 +1,12 @@
 package model
 
 type EncryptReqBody struct {
-	// The plaintext to encrypt.
-	Plaintext string `json:"plaintext,omitempty"`
+	// The base64-encoded plaintext to encrypt.
+	PlaintextB64 string `json:"plaintext,omitempty"`
+	// TODO add aad
 }
 
 type EncryptResponse200 struct {
-	// The encrypted data.
+	// The base64-encoded encrypted data.
 	CiphertextB64 string `json:"ciphertext,omitempty"`
 }

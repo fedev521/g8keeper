@@ -28,7 +28,7 @@ func PostEncryptHF(kekManager *kms.KEKManager) http.HandlerFunc {
 
 		// encrypt plaintext
 		primitive, _ := kekManager.GetAEAD()
-		pt := []byte(body.Plaintext)
+		pt := []byte(body.PlaintextB64)
 		aad := []byte{}
 		ciphertext, err := primitive.Encrypt(pt, aad)
 		if err != nil {
