@@ -23,9 +23,3 @@ echo -n '{"plaintext":"encrypt-and-decrypt"}' \
 | curl -s -d @- -X POST localhost:8080/v1/encrypt \
 | curl -s -d @- -X POST localhost:8080/v1/decrypt
 ```
-
-## Setup
-
-```bash
-tinkey create-keyset --key-template=AES256_GCM > configs/keyset.json
-```

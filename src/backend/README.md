@@ -10,7 +10,8 @@ go run .
 Build container image and run container with:
 
 ```bash
-docker build -t backend:latest .
+cd src
+docker build -t backend:latest -f backend/Dockerfile .
 docker run --rm -it backend
 ```
 
