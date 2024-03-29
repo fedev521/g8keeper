@@ -1,9 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.32.0 (765fde254)
   labels:
     io.kompose.service: tinksrv
   name: tinksrv
@@ -14,11 +11,8 @@ spec:
       io.kompose.service: tinksrv
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert
-        kompose.version: 1.32.0 (765fde254)
       labels:
-        io.kompose.network/k8s-password-manager-default: "true"
+        io.kompose.network/g8keeper-default: "true"
         io.kompose.service: tinksrv
     spec:
       containers:
@@ -26,13 +20,23 @@ spec:
           imagePullPolicy: IfNotPresent
           name: tinksrv
           ports:
-            - containerPort: 8001
+            - containerPort: 8081
               protocol: TCP
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "250m"
+              memory: "512Mi"
+              cpu: "500m"
             limits:
-              memory: "256Mi"
-              cpu: "250m"
+              memory: "512Mi"
+              cpu: "500m"
+          volumeMounts:
+            - mountPath: /run/secrets
+              name: vol-tinksrv-kek
       restartPolicy: Always
+      volumes:
+        - name: vol-tinksrv-kek
+          secret:
+            secretName: tinksrv-kek
+            items:
+              - key: tinksrv-kek
+                path: tinksrv-kek
