@@ -1,0 +1,9 @@
+[log]
+level = "info"
+
+[app]
+name = "tinksrv"
+port = "8081"
+
+[kms]
+kekFile = "/run/secrets/tinksrv_kek"

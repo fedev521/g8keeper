@@ -8,10 +8,18 @@ services:
       dockerfile: ./Dockerfile
     expose:
       - 8081
+    secrets:
+      - tinksrv_kek
   backend:
     image: backend
     build:
-      context: src/backend
-      dockerfile: ./Dockerfile
+      context: src
+      dockerfile: backend/Dockerfile
     expose:
       - 8080
+    ports:
+      - "8080:8080"
+
+secrets:
+  tinksrv_kek:
+    file: src/tinksrv/configs/keyset.json
