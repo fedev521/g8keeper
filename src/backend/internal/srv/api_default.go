@@ -55,7 +55,11 @@ func PostPasswordHF(pk store.PasswordKeeper) http.HandlerFunc {
 			},
 		}
 
-		pk.Store(password, password.Metadata.Name)
+		err = pk.Store(password, password.Metadata.Name)
+		if err != nil {
+			log.Error(err.Error())
+			return
+		}
 
 		w.WriteHeader(http.StatusOK)
 	}

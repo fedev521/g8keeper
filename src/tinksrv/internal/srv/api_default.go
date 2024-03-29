@@ -29,7 +29,7 @@ func PostEncryptHF(kekManager *kms.KEKManager) http.HandlerFunc {
 		// encrypt plaintext
 		primitive, _ := kekManager.GetAEAD()
 		pt := []byte(body.PlaintextB64)
-		aad := []byte{}
+		aad := []byte("aad")
 		ciphertext, err := primitive.Encrypt(pt, aad)
 		if err != nil {
 			log.Error(err.Error())
@@ -64,7 +64,7 @@ func PostDecryptHF(kekManager *kms.KEKManager) http.HandlerFunc {
 
 		// base64-decode and decrypt ct
 		ct, err := base64.StdEncoding.DecodeString(body.CiphertextB64)
-		aad := []byte{}
+		aad := []byte("aad")
 		if err != nil {
 			log.Error(err.Error())
 			sendBadRequestError(w, r, "Bad request")

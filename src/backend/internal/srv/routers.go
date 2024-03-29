@@ -20,7 +20,7 @@ type Routes []Route
 
 func NewRouter(tinkSvcConf svc.TinkSvcConfig) *mux.Router {
 	var keeper store.PasswordKeeper
-	keeper, err := store.NewCryptedInMemKeeper()
+	keeper, err := store.NewCryptedInMemKeeper(tinkSvcConf)
 	if err != nil {
 		log.Error(err.Error())
 		// TODO return err

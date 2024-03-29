@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/fedev521/g8keeper/backend/internal/log"
+	"github.com/fedev521/g8keeper/backend/internal/svc"
 	"github.com/fedev521/g8keeper/backend/internal/types"
 	"github.com/fedev521/g8keeper/tinksrv/pkg/sec"
 	"github.com/tink-crypto/tink-go/v2/aead"
@@ -17,14 +19,12 @@ type CryptedInMemKeeper struct {
 	primitive tink.AEAD
 }
 
-func NewCryptedInMemKeeper() (*CryptedInMemKeeper, error) {
-	kmsClient := sec.NewG8KeeperKMSClient()
-	keyURI := "TODO"
-	kekAEAD, err := kmsClient.GetAEAD(keyURI)
+func NewCryptedInMemKeeper(tinkSvcConf svc.TinkSvcConfig) (*CryptedInMemKeeper, error) {
+	rka, err := sec.NewRemoteKEKAEAD(tinkSvcConf.Host, tinkSvcConf.Port)
 	if err != nil {
-		return &CryptedInMemKeeper{}, fmt.Errorf("could not get AEAD backend: %w", err)
+		return nil, fmt.Errorf("could create remote KEK AEAD: %w", err)
 	}
-	primitive := aead.NewKMSEnvelopeAEAD2(aead.AES256GCMKeyTemplate(), kekAEAD)
+	primitive := aead.NewKMSEnvelopeAEAD2(aead.AES256GCMKeyTemplate(), rka)
 
 	keeper := &CryptedInMemKeeper{
 		memory:    new(sync.Map),
@@ -45,6 +45,9 @@ func (k CryptedInMemKeeper) Store(p types.Password, key string) error {
 	p.Secret = base64.StdEncoding.EncodeToString(ct)
 
 	k.memory.Store(key, p)
+	log.Debug("stored password", map[string]interface{}{
+		"key": key,
+	})
 	return nil
 }
 
@@ -78,7 +81,8 @@ func (k CryptedInMemKeeper) ListMetadata() ([]types.PasswordMetadata, error) {
 	k.memory.Range(func(key, p any) bool {
 		typedPassword, cast := p.(types.Password)
 		if !cast {
-			return false
+			log.Error("unable to cast password to types.Password")
+			return true
 		}
 		metadata = append(metadata, typedPassword.Metadata)
 		return true
