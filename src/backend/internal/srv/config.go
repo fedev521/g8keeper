@@ -2,6 +2,8 @@ package srv
 
 import "errors"
 
+const passwordIdKey = "password_id"
+
 // Config holds configuration data for the app.
 type Config struct {
 	// Name of the app.

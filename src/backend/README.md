@@ -19,6 +19,12 @@ Call with:
 ```bash
 curl localhost:8080/v1/passwords
 
-echo -n '{"name":"Google", "password":"mY$3kreT"}' \
+echo -n '{"name":"google", "password":"mY$3kreT"}' \
 | curl -s -d @- -X POST localhost:8080/v1/passwords
+
+echo -n '{"name":"amazon", "password":"mYP4$$w0rD"}' \
+| curl -s -d @- -X POST localhost:8080/v1/passwords
+
+curl localhost:8080/v1/passwords/google
+curl localhost:8080/v1/passwords/amazon
 ```

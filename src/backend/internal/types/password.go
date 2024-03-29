@@ -7,6 +7,6 @@ type PasswordMetadata struct {
 }
 
 type Password struct {
-	Secret   string           `json:"name,omitempty"`
+	Secret   string           `json:"secret,omitempty"`
 	Metadata PasswordMetadata `json:"metadata,omitempty"`
 }

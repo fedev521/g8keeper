@@ -1,6 +1,7 @@
 package srv
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/fedev521/g8keeper/backend/internal/log"
@@ -27,6 +28,12 @@ func NewRouter(tinkSvcConf svc.TinkSvcConfig) *mux.Router {
 	}
 
 	var routes = Routes{
+		Route{
+			"GetPassword",
+			"GET",
+			fmt.Sprintf("/v1/passwords/{%s}", passwordIdKey),
+			GetPasswordHF(keeper),
+		},
 		Route{
 			"ListPasswords",
 			"GET",

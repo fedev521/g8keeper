@@ -7,7 +7,44 @@ import (
 	"github.com/fedev521/g8keeper/backend/internal/log"
 	"github.com/fedev521/g8keeper/backend/internal/store"
 	"github.com/fedev521/g8keeper/backend/internal/types"
+	"github.com/gorilla/mux"
 )
+
+func GetPasswordHF(pk store.PasswordKeeper) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		pathParams := mux.Vars(r)
+		passwordId, found := pathParams[passwordIdKey]
+		if !found {
+			log.Error("could not get password ID", map[string]interface{}{
+				"key": passwordIdKey,
+			})
+			sendBadRequestError(w, r, "Bad request")
+			return
+		}
+		// TODO escape and validate param
+		password, err := pk.Retrieve(passwordId)
+		if err != nil {
+			// TODO handle client and server errors differently
+			log.Error(err.Error())
+			sendBadRequestError(w, r, "Bad request")
+			return
+		}
+
+		// create response payload with both password secret and metadata
+		payload, err := json.Marshal(GetPasswordResponse200{
+			Password: password,
+		})
+		if err != nil {
+			log.Error(err.Error())
+			sendUnexpectedServerError(w, r)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+		w.WriteHeader(http.StatusOK)
+		w.Write(payload)
+	}
+}
 
 func ListPasswordsHF(pk store.PasswordKeeper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -18,7 +55,7 @@ func ListPasswordsHF(pk store.PasswordKeeper) http.HandlerFunc {
 			return
 		}
 
-		// create response payload password information (but not the actual secret)
+		// create response payload with password information (but no secret)
 		payload, err := json.Marshal(ListPasswordsResponse200{
 			PasswordMetadata: metadata,
 		})
