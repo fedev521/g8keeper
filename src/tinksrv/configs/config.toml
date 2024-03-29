@@ -3,7 +3,7 @@ level = "info"
 
 [app]
 name = "tinksrv"
-port = "8080"
+port = "8081"
 
 [kms]
 kekFile = "../../configs/keyset.json"

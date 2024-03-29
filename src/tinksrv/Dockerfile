@@ -21,5 +21,5 @@ FROM gcr.io/distroless/static-debian12:nonroot
 WORKDIR /
 COPY --from=builder --chown=nonroot --chmod=500 /go/bin/tinksrv .
 COPY --chown=nonroot --chmod=600 configs .
-EXPOSE 8001
-CMD [ "/tinksrv", "-p", "8001" ]
+
+CMD [ "/tinksrv" ]

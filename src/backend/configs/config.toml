@@ -7,7 +7,7 @@ port = "8080"
 
 [tinksvc]
 host = "localhost"
-port = "3306"
+port = "8081"
 kekUri = "mykekuri"
 
 [database]

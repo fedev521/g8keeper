@@ -21,4 +21,5 @@ FROM gcr.io/distroless/static-debian12:nonroot
 WORKDIR /
 COPY --from=builder --chown=nonroot --chmod=500 /go/bin/backend .
 COPY --chown=nonroot --chmod=600 configs .
+
 CMD [ "/backend" ]
