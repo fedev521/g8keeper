@@ -23,6 +23,9 @@ spec:
             - containerPort: 8080
               hostPort: 8080
               protocol: TCP
+          volumeMounts:
+            - mountPath: /configs
+              name: vol-cm-backend
           resources:
             requests:
               memory: "512Mi"
@@ -31,3 +34,7 @@ spec:
               memory: "512Mi"
               cpu: "500m"
       restartPolicy: Always
+      volumes:
+        - name: vol-cm-backend
+          configMap:
+            name: cm-backend

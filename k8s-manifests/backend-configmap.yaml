@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-backend
+data:
+  config.toml: |
+    [log]
+    level = "info"
+
+    [app]
+    name = "backend"
+    port = "8080"
+
+    [tinksvc]
+    host = "tinksrv"
+    port = "8081"
+    kekUri = "mykekuri"
+
+    [database]
+    storage = "inmemory"

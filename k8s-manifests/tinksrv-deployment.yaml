@@ -22,6 +22,11 @@ spec:
           ports:
             - containerPort: 8081
               protocol: TCP
+          volumeMounts:
+            - mountPath: /run/secrets
+              name: vol-tinksrv-kek
+            - mountPath: /configs
+              name: vol-cm-tinksrv
           resources:
             requests:
               memory: "512Mi"
@@ -29,9 +34,6 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
-          volumeMounts:
-            - mountPath: /run/secrets
-              name: vol-tinksrv-kek
       restartPolicy: Always
       volumes:
         - name: vol-tinksrv-kek
@@ -40,3 +42,6 @@ spec:
             items:
               - key: tinksrv-kek
                 path: tinksrv-kek
+        - name: vol-cm-tinksrv
+          configMap:
+            name: cm-tinksrv
