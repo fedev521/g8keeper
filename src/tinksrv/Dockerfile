@@ -20,6 +20,5 @@ RUN --mount=type=cache,mode=0755,target=/root/.cache/go-build \
 FROM gcr.io/distroless/static-debian12:nonroot
 WORKDIR /
 COPY --from=builder --chown=nonroot --chmod=500 /go/bin/tinksrv .
-COPY --chown=nonroot --chmod=600 configs/config-compose.toml ./config.toml
 
 CMD [ "/tinksrv" ]

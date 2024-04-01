@@ -10,16 +10,25 @@ services:
       - 8081
     secrets:
       - tinksrv-kek
+    configs:
+      - source: conf-tinksrv
+        target: /config.toml
   backend:
     image: backend
     build:
       context: src
       dockerfile: backend/Dockerfile
-    expose:
-      - 8080
     ports:
       - "8080:8080"
+    configs:
+      - source: conf-backend
+        target: /config.toml
 
 secrets:
   tinksrv-kek:
     file: src/tinksrv/configs/keyset.json
+configs:
+  conf-tinksrv:
+    file: src/tinksrv/configs/config-compose.toml
+  conf-backend:
+    file: src/backend/configs/config-compose.toml

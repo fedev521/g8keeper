@@ -27,6 +27,5 @@ RUN --mount=type=cache,mode=0755,target=/root/.cache/go-build \
 FROM gcr.io/distroless/static-debian12:nonroot
 WORKDIR /
 COPY --from=builder --chown=nonroot --chmod=500 /go/bin/backend .
-COPY --chown=nonroot --chmod=600 backend/configs/config-compose.toml config.toml
 
 CMD [ "/backend" ]
