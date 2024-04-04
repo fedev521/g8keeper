@@ -13,8 +13,13 @@ Components:
 ## Setup
 
 ```bash
-src/tinksrv
-tinkey create-keyset --key-template=AES256_GCM > configs/keyset.json
+tinkey create-keyset --key-template=AES256_GCM > keyset.json
+
+# if you want to use docker compose
+mv keyset.json src/tinksrv/configs
+
+# if you want to use helm
+mv keyset.json g8keeper/secrets/tinksrv
 ```
 
 ## How to Run Locally
