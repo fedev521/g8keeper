@@ -17,9 +17,7 @@ docker run --rm -it tinksrv
 Call with:
 
 ```bash
-curl localhost:8080/
-
 echo -n '{"plaintext":"encrypt-and-decrypt"}' \
-| curl -s -d @- -X POST localhost:8080/v1/encrypt \
-| curl -s -d @- -X POST localhost:8080/v1/decrypt
+| curl -s -d @- -X POST localhost:8081/v1/encrypt \
+| curl -s -d @- -X POST localhost:8081/v1/decrypt
 ```
