@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  labels:
+    io.kompose.service: tinksrv
+    chart: "{{ include "g8keeper.chart" . }}"
+  name: "{{ include "g8keeper.tinksrv.svc.name" . }}"
+spec:
+  ports:
+    - name: '8081'
+      port: {{ .Values.services.tinksrv.port }}
+      targetPort: {{ .Values.services.tinksrv.port }}
+  selector:
+    io.kompose.service: tinksrv
+  type: {{ .Values.services.tinksrv.type }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: tinksrv
+    chart: "{{ include "g8keeper.chart" . }}"
+  name: "{{ include "g8keeper.tinksrv.dplm.name" . }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: tinksrv
+  template:
+    metadata:
+      labels:
+        io.kompose.network/g8keeper-default: 'true'
+        io.kompose.service: tinksrv
+    spec:
+      containers:
+        - image: tinksrv
+          imagePullPolicy: IfNotPresent
+          name: tinksrv
+          ports:
+            - containerPort: {{ .Values.services.tinksrv.port }}
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: "{{ include "g8keeper.tinksrv.sct.mountPath" . }}"
+              name: vol-sct-tinksrv-kek
+            - mountPath: /configs
+              name: vol-cm-tinksrv
+      volumes:
+        - name: vol-sct-tinksrv-kek
+          secret:
+            defaultMode: 420
+            secretName: "{{ include "g8keeper.tinksrv.sct.name" . }}"
+            items:
+              - key: "{{ include "g8keeper.tinksrv.sct.fileName" . }}"
+                path: "{{ include "g8keeper.tinksrv.sct.fileName" . }}"
+        - name: vol-cm-tinksrv
+          configMap:
+            name: "{{ include "g8keeper.tinksrv.cm.name" . }}"
+            defaultMode: 420
+---
+apiVersion: v1
+kind: ConfigMap
+data:
+  config.toml: |
+    [log]
+    level = "info"
+
+    [app]
+    name = "tinksrv"
+    port = "{{ .Values.services.tinksrv.port }}"
+
+    [kms]
+    kekFile = "{{ include "g8keeper.tinksrv.sct.mountPath" . }}/{{ include "g8keeper.tinksrv.sct.fileName" . }}"
+metadata:
+  annotations: {}
+  name: "{{ include "g8keeper.tinksrv.cm.name" . }}"
+  labels:
+    chart: "{{ include "g8keeper.chart" . }}"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    io.kompose.service: tinksrv-kek
+  name: "{{ include "g8keeper.tinksrv.sct.name" . }}"
+type: Opaque
+data:
+  {{ include "g8keeper.tinksrv.sct.fileName" . }}: {{ .Files.Get "secrets/tinksrv/keyset.json" | b64enc }}

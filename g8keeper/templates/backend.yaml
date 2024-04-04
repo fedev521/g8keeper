@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  labels:
+    io.kompose.service: backend
+    chart: "{{ include "g8keeper.chart" . }}"
+  name: "{{ include "g8keeper.backend.svc.name" . }}"
+spec:
+  ports:
+    - name: '8080'
+      port: {{ .Values.services.backend.port }}
+      targetPort: {{ .Values.services.backend.port }}
+  selector:
+    io.kompose.service: backend
+  sessionAffinity: None
+  type: {{ .Values.services.backend.type }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: backend
+    chart: "{{ include "g8keeper.chart" . }}"
+  name: "{{ include "g8keeper.backend.dplm.name" . }}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: backend
+  template:
+    metadata:
+      labels:
+        io.kompose.network/g8keeper-default: 'true'
+        io.kompose.service: backend
+    spec:
+      containers:
+        - image: backend
+          imagePullPolicy: IfNotPresent
+          name: backend
+          ports:
+            - containerPort: {{ .Values.services.backend.port }}
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /configs
+              name: vol-cm-backend
+      volumes:
+        - name: vol-cm-backend
+          configMap:
+            defaultMode: 420
+            name: {{ include "g8keeper.backend.cm.name" .}}
+---
+apiVersion: v1
+data:
+  config.toml: |
+    [log]
+    level = "info"
+
+    [app]
+    name = "backend"
+    port = "{{ .Values.services.backend.port }}"
+
+    [tinksvc]
+    host = "{{ include "g8keeper.tinksrv.svc.name" .}}"
+    port = "{{ .Values.services.tinksrv.port }}"
+    kekUri = "mykekuri"
+
+    [database]
+    storage = "inmemory"
+kind: ConfigMap
+metadata:
+  name: {{ include "g8keeper.backend.cm.name" .}}
+  labels:
+    chart: {{ include "g8keeper.chart" . }}
