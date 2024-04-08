@@ -39,3 +39,27 @@ kind load docker-image tinksrv backend
 kubectl apply -f k8s/manifests
 kubectl port-forward service/backend 8080:8080
 ```
+
+### Helm (with Ingress)
+
+```bash
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace \
+  --set controller.service.type=NodePort
+
+helm install ./g8keeper --generate-name
+
+HTTP_NODE_PORT=$(kubectl get service --namespace ingress-nginx ingress-nginx-controller -o jsonpath="{.spec.ports[0].nodePort}")
+HTTPS_NODE_PORT=$(kubectl get service --namespace ingress-nginx ingress-nginx-controller -o jsonpath="{.spec.ports[1].nodePort}")
+NODE_IP="$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}')"
+
+curl \
+  --resolve g8keeper.localcluster.me:$HTTP_NODE_PORT:$NODE_IP \
+  http://g8keeper.localcluster.me:$HTTP_NODE_PORT/api/v1/passwords
+
+kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8888:80
+curl \
+  --resolve g8keeper.localcluster.me:8888:127.0.0.1 \
+  http://g8keeper.localcluster.me:8888/api/v1/passwords
+```
