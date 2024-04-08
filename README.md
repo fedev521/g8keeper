@@ -58,8 +58,17 @@ curl \
   --resolve g8keeper.localcluster.me:$HTTP_NODE_PORT:$NODE_IP \
   http://g8keeper.localcluster.me:$HTTP_NODE_PORT/api/v1/passwords
 
+# alternative with port forwarding
 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8888:80
 curl \
   --resolve g8keeper.localcluster.me:8888:127.0.0.1 \
   http://g8keeper.localcluster.me:8888/api/v1/passwords
+```
+
+You can render manifests with:
+
+```bash
+helm template g8k ./g8keeper \
+  | yq eval 'del(. | select(.kind == "Secret"))' \
+  > k8s-manifests/g8keeper-no-secrets.yaml
 ```
