@@ -58,6 +58,14 @@ curl \
   --resolve g8keeper.localcluster.me:$HTTP_NODE_PORT:$NODE_IP \
   http://g8keeper.localcluster.me:$HTTP_NODE_PORT/api/v1/passwords
 
+echo -n '{"name":"google", "password":"mY$3kreT"}' \
+| curl -s -d @- -X POST http://g8keeper.localcluster.me:$HTTP_NODE_PORT/api/v1/passwords \
+    --resolve g8keeper.localcluster.me:$HTTP_NODE_PORT:$NODE_IP
+
+curl \
+  --resolve g8keeper.localcluster.me:$HTTP_NODE_PORT:$NODE_IP \
+  http://g8keeper.localcluster.me:$HTTP_NODE_PORT/api/v1/passwords
+
 # alternative with port forwarding
 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8888:80
 curl \
