@@ -24,7 +24,7 @@ metadata:
     chart: "{{ include "g8keeper.chart" . }}"
   name: "{{ include "g8keeper.backend.dplm.name" . }}"
 spec:
-  replicas: 1
+  replicas: {{ .Values.deployments.backend.replicas }}
   selector:
     matchLabels:
       io.kompose.service: backend
@@ -35,19 +35,14 @@ spec:
         io.kompose.service: backend
     spec:
       containers:
-        - image: backend
+        - image: "{{ .Values.deployments.backend.image }}:{{ .Values.deployments.backend.tag | default .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
           name: backend
           ports:
             - containerPort: {{ .Values.services.backend.port }}
               protocol: TCP
           resources:
-            limits:
-              cpu: 500m
-              memory: 512Mi
-            requests:
-              cpu: 500m
-              memory: 512Mi
+            {{- toYaml .Values.deployments.backend.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /configs
               name: vol-cm-backend

@@ -23,7 +23,7 @@ metadata:
     chart: "{{ include "g8keeper.chart" . }}"
   name: "{{ include "g8keeper.tinksrv.dplm.name" . }}"
 spec:
-  replicas: 1
+  replicas: {{ .Values.deployments.tinksrv.replicas }}
   selector:
     matchLabels:
       io.kompose.service: tinksrv
@@ -34,19 +34,14 @@ spec:
         io.kompose.service: tinksrv
     spec:
       containers:
-        - image: tinksrv
+        - image: "{{ .Values.deployments.tinksrv.image }}:{{ .Values.deployments.tinksrv.tag | default .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
           name: tinksrv
           ports:
             - containerPort: {{ .Values.services.tinksrv.port }}
               protocol: TCP
           resources:
-            limits:
-              cpu: 500m
-              memory: 512Mi
-            requests:
-              cpu: 500m
-              memory: 512Mi
+            {{- toYaml .Values.deployments.tinksrv.resources | nindent 12 }}
           volumeMounts:
             - mountPath: "{{ include "g8keeper.tinksrv.sct.mountPath" . }}"
               name: vol-sct-tinksrv-kek
