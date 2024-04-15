@@ -19,7 +19,7 @@ tinkey create-keyset --key-template=AES256_GCM > keyset.json
 mv keyset.json src/tinksrv/configs
 
 # if you want to use helm
-mv keyset.json g8keeper/secrets/tinksrv
+mv keyset.json helm/g8keeper/secrets/tinksrv
 ```
 
 ## How to Run Locally
@@ -48,7 +48,7 @@ helm upgrade --install ingress-nginx ingress-nginx \
   --namespace ingress-nginx --create-namespace \
   --set controller.service.type=NodePort
 
-helm install ./g8keeper --generate-name
+helm install helm/g8keeper --generate-name
 
 HTTP_NODE_PORT=$(kubectl get service --namespace ingress-nginx ingress-nginx-controller -o jsonpath="{.spec.ports[0].nodePort}")
 HTTPS_NODE_PORT=$(kubectl get service --namespace ingress-nginx ingress-nginx-controller -o jsonpath="{.spec.ports[1].nodePort}")
@@ -76,7 +76,7 @@ curl \
 You can render manifests with:
 
 ```bash
-helm template g8k ./g8keeper \
+helm template g8k helm/g8keeper \
   | yq eval 'del(. | select(.kind == "Secret"))' \
   > k8s-manifests/g8keeper-no-secrets.yaml
 ```
