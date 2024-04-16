@@ -35,9 +35,6 @@ docker compose up --build
 ```bash
 kind create cluster
 kind load docker-image tinksrv backend
-
-kubectl apply -f k8s/manifests
-kubectl port-forward service/backend 8080:8080
 ```
 
 ### Helm (with Ingress)
