@@ -3,6 +3,9 @@ name: docker-build-push
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - 'src/**'
+      - '!src/**/README.md'
 
 jobs:
   build:
