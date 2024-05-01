@@ -7,6 +7,10 @@ on:
       - 'src/**'
       - '!src/**/README.md'
 
+env:
+  TINKSRV_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/g8k-tinksrv
+  BACKEND_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/g8k-backend
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,18 +28,38 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       -
+        name: Docker metadata tinksrv
+        id: docker-meta-tinksrv
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.TINKSRV_IMAGE }}
+          tags: |
+            type=sha,prefix=,suffix=,format=short
+      -
         name: Build and push tinksrv
         uses: docker/build-push-action@v5
         with:
           context: ./src/tinksrv
           file: ./src/tinksrv/Dockerfile
+          tags: ${{ steps.docker-meta-tinksrv.outputs.tags }}
+          labels: ${{ steps.docker-meta-tinksrv.outputs.labels }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/g8k-tinksrv:${{ github.sha }}
+      -
+        name: Docker metadata backend
+        id: docker-meta-backend
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.BACKEND_IMAGE }}
+          tags: |
+            type=sha,prefix=,suffix=,format=short
       -
         name: Build and push backend
         uses: docker/build-push-action@v5
         with:
           context: ./src
           file: ./src/backend/Dockerfile
+          tags: ${{ steps.docker-meta-backend.outputs.tags }}
+          labels: ${{ steps.docker-meta-backend.outputs.labels }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/g8k-backend:${{ github.sha }}

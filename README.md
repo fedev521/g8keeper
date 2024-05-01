@@ -77,3 +77,11 @@ helm template g8k helm/g8keeper \
   | yq eval 'del(. | select(.kind == "Secret"))' \
   > k8s-manifests/g8keeper-no-secrets.yaml
 ```
+
+## Actions
+
+To run actions locally:
+
+```bash
+act --secret-file secrets/act.env
+```
