@@ -22,3 +22,9 @@ func sendUnexpectedServerError(w http.ResponseWriter, r *http.Request) {
 		Message: "Something went wrong",
 	})
 }
+
+func sendNotFoundError(w http.ResponseWriter, r *http.Request, msg string) {
+	sendError(w, r, http.StatusNotFound, &ErrorResponse{
+		Message: msg,
+	})
+}

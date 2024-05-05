@@ -18,7 +18,7 @@ func GetPasswordHF(pk store.PasswordKeeper) http.HandlerFunc {
 			log.Error("could not get password ID", map[string]interface{}{
 				"key": passwordIdKey,
 			})
-			sendBadRequestError(w, r, "Bad request")
+			sendNotFoundError(w, r, "Password matching given id not found")
 			return
 		}
 		// TODO escape and validate param
@@ -26,7 +26,7 @@ func GetPasswordHF(pk store.PasswordKeeper) http.HandlerFunc {
 		if err != nil {
 			// TODO handle client and server errors differently
 			log.Error(err.Error())
-			sendBadRequestError(w, r, "Bad request")
+			sendNotFoundError(w, r, "Password not found")
 			return
 		}
 
