@@ -36,6 +36,8 @@ jobs:
             ${{ env.TINKSRV_IMAGE }}
           tags: |
             type=sha,prefix=,suffix=,format=short
+          flavor: |
+            latest=true
       -
         name: Build and push tinksrv
         uses: docker/build-push-action@v5
@@ -54,6 +56,8 @@ jobs:
             ${{ env.BACKEND_IMAGE }}
           tags: |
             type=sha,prefix=,suffix=,format=short
+          flavor: |
+            latest=true
       -
         name: Build and push backend
         uses: docker/build-push-action@v5
