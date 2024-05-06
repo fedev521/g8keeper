@@ -1,0 +1,31 @@
+ingress:
+  enabled: true
+  hosts:
+    - host: g8keeper.gkedevcluster.me
+      paths:
+        - path: /api(/|$)(.*)
+          pathType: Prefix
+
+deployments:
+  backend:
+    image: europe-docker.pkg.dev/<GCP PROJECT>/g8keeper/g8k-backend
+    tag: latest
+    replicas: 1
+    resources:
+      limits:
+        cpu: 250m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 512Mi
+  tinksrv:
+    image: docker.io/<DOCKERHUB USERNAME>/g8k-tinksrv
+    tag: latest
+    replicas: 2
+    resources:
+      limits:
+        cpu: 250m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 512Mi
