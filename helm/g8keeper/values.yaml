@@ -38,13 +38,13 @@ deployments:
   tinksrv:
     image: tinksrv
     tag: latest
-    replicas: 2
+    replicas: 1
     resources:
       limits:
-        cpu: 500m
+        cpu: 250m
         memory: 512Mi
       requests:
-        cpu: 500m
+        cpu: 250m
         memory: 512Mi
 
 imagePullSecrets: []
