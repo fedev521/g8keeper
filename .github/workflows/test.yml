@@ -1,0 +1,38 @@
+name: List services in GCP
+
+on:
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: prj-kube-g8keeper-001
+  CLUSTER: gke-cluster-dev
+  LOCATION: us-east1-c
+  SERVICE_ACCOUNT: sa-gha-cicd-dev@prj-kube-g8keeper-001.iam.gserviceaccount.com
+  PROVIDER: projects/689201864685/locations/global/workloadIdentityPools/wi-pool-t1-dev/providers/wi-pool-provider-gha-cicd-dev
+
+permissions:
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+    -
+      name: 'Authenticate to GCP'
+      id: 'auth'
+      uses: 'google-github-actions/auth@v2'
+      with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+    -
+      name: 'gcloud'
+      id: 'gcloud'
+      run: |-
+        gcloud container clusters list --project=prj-kube-g8keeper-001 || true
+        gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
+        gcloud container clusters list --project=prj-kube-g8keeper-001
