@@ -15,6 +15,16 @@ variable "env" {
   default     = "g8k"
 }
 
+variable "github_account" {
+  description = "GitHub account name. Used for Workload Identity Federation (GitHub Actions)."
+  type        = string
+}
+
+variable "github_repo" {
+  description = "GitHub repository name. Used for Workload Identity Federation (GitHub Actions)."
+  type        = string
+}
+
 ################################################################################
 
 variable "cluster_network_config" {
